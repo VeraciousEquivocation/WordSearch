@@ -20,9 +20,9 @@ let board3 = [
 let word3 = 'aaa'
 
 let board4 = [
-    'popopfdsfspopfdsfdspopop'.split('')
+    'tootootfdsfstootfdsfdstootoot'.split('')
 ]
-let word4 = 'pop'
+let word4 = 'toot'
 
 let board5 = [
     ['c','c','a','t','e','c'],
@@ -54,10 +54,12 @@ var countTtlWords = (board,word) => {
         console.log(`no word was provided`)
         return
     }
+    
+    let flipIt = flipBoard(board,word)
 
     let rowCnt = checkRows(board,word)
-    let colCnt = checkCols(board,word)
-    let diagCnt = checkDiags(board,word)
+    let colCnt = checkRows(flipIt,word)
+    let diagCnt = checkDiags(board,word,flipIt)
     let ttl = rowCnt + colCnt + diagCnt
 
     console.log(`TOTAL TIMES ${word} WAS FOUND: ${ttl}`)
@@ -65,20 +67,19 @@ var countTtlWords = (board,word) => {
 
 /**
  * count total time word shows up in diagonal rows.
- * gets top left to right diags, and then flips board
- * and gets the remaining diags, merge and passes to checkRows
+ * gets top left to right diags, and then gets the remaining diags, 
+ * merge and passes to checkRows
  * @param {*} board 
  * @param {*} word 
+ * @param {*} flippedBoard
  * @returns 
  */
-function checkDiags(board,word) {
+function checkDiags(board,word, flippedBoard) {
     if(board.length === 1) return 0
 
     let left = buildDiagRowsLeftToRight(board,word)
 
-    let flipIt = flipBoard(board,word)
-
-    let right = buildDiagRowsLeftToRight(flipIt,word)
+    let right = buildDiagRowsLeftToRight(flippedBoard,word)
 
     right.shift()
 
@@ -145,20 +146,6 @@ function checkRows(board, word){
 
     // Return the count. 
     return cnt; 
-}
-
-/**
- * passes a flipped board to check rows, to count total in columns
- * @param {*} board 
- * @param {*} word 
- * @returns 
- */
-var checkCols = (board,word) => {
-    let cnt = 0
-
-    let flipped = flipBoard(board)
-
-    return checkRows(flipped,word)
 }
 
 var flipBoard = (brd) => {
